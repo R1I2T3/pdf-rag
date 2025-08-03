@@ -21,8 +21,11 @@
     "db:stop": "turbo -F server db:stop",
     "db:down": "turbo -F server db:down"
   },
-  "dependencies": {},
+  "dependencies": {
+    "nodemailer": "^7.0.5"
+  },
   "devDependencies": {
+    "@types/nodemailer": "^6.4.17",
     "turbo": "^2.5.4"
   },
   "packageManager": "npm@11.5.2"

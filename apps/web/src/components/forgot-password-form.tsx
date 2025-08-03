@@ -4,12 +4,27 @@ import { Mail } from "lucide-react";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
+import { authClient } from "@/lib/auth-client";
+import { toast } from "sonner";
 export const ForgotPasswordForm = () => {
   const [email, setEmail] = React.useState("");
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle forgot password logic here
-    console.log("Forgot password for:", { email });
+    authClient.forgetPassword(
+      { email },
+      {
+        onError: (ctx) => {
+          if (ctx.error.status === 403) {
+            toast.error("Please verify your email address");
+          }
+          toast.error(ctx.error.message);
+        },
+        onSuccess: () => {
+          toast.success("Reset link sent to your email");
+        },
+      }
+    );
   };
   return (
     <div className="w-full max-w-md">

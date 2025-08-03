@@ -7,7 +7,7 @@ export const Route = createFileRoute("/sign-up")({
 
 function RouteComponent() {
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="flex items-center justify-center h-screen bg-background">
       <div className="absolute top-4 right-4">
         <ModeToggle />
       </div>
