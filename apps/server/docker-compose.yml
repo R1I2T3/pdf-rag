@@ -20,5 +20,20 @@ services:
       retries: 5
     restart: unless-stopped
 
+  redis:
+    image: redis
+    container_name: pdf-rag-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - pdf-rag_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
 volumes:
   pdf-rag_mysql_data:
+  pdf-rag_redis_data:
