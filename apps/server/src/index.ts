@@ -25,6 +25,8 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    console.log(file.originalname);
+
     cb(null, `${uniqueSuffix}-${file.originalname}`);
   },
 });
@@ -63,7 +65,7 @@ app.post("/upload/pdf", upload.single("pdf"), async (req, res) => {
   await queue.add(
     "file-ready",
     JSON.stringify({
-      filename: req.file.originalname,
+      filename: req.file.filename,
       destination: req.file.destination,
       path: req.file.path,
     })
