@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "pdf-rag-api-client",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
