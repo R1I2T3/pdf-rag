@@ -1,16 +1,11 @@
 import "dotenv/config";
 import cors from "cors";
-import multer from "multer";
 import express from "express";
 import { auth } from "./lib/auth";
 import { toNodeHandler } from "better-auth/node";
 import { Queue } from "bullmq";
-import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
-import { fromNodeHeaders } from "better-auth/node";
-export const model = new ChatGoogleGenerativeAI({
-  model: "gemini-1.5-flash",
-  maxOutputTokens: 2048,
-});
+import { upload } from "./lib/multer";
+import { chain } from "./lib/model-config";
 
 export const queue = new Queue("file-upload-queue", {
   connection: {
@@ -18,20 +13,6 @@ export const queue = new Queue("file-upload-queue", {
     port: 6379,
   },
 });
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/");
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    console.log(file.originalname);
-
-    cb(null, `${uniqueSuffix}-${file.originalname}`);
-  },
-});
-
-const upload = multer({ storage: storage });
 
 const app = express();
 
@@ -52,7 +33,7 @@ app.get("/", (_req, res) => {
   res.status(200).send("OK");
 });
 
-app.post("/upload/pdf", upload.single("pdf"), async (req, res) => {
+app.post("/api/upload/pdf", upload.single("pdf"), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: "No file uploaded." });
   }
@@ -71,6 +52,30 @@ app.post("/upload/pdf", upload.single("pdf"), async (req, res) => {
     })
   );
   return res.json({ message: "uploaded" });
+});
+
+app.post("/api/chat", async (req, res) => {
+  try {
+    const userQuery = req.body.message as string;
+    if (!userQuery) {
+      return res.status(400).json({ error: "Message query is required." });
+    }
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache");
+    res.setHeader("Connection", "keep-alive");
+    res.flushHeaders();
+    const stream = await chain.stream(userQuery);
+    for await (const chunk of stream) {
+      if (chunk) {
+        res.write(`data: ${JSON.stringify({ message: chunk })}\n\n`);
+      }
+    }
+
+    res.end();
+  } catch (error) {
+    console.error("Error in chat API:", error);
+    res.end(`data: ${JSON.stringify({ error: "An error occurred." })}\n\n`);
+  }
 });
 
 const port = process.env.PORT || 3000;

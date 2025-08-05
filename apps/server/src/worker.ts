@@ -10,12 +10,12 @@ const REDIS_CONNECTION = {
   host: "localhost",
   port: 6379,
 };
-const QDRANT_CONFIG = {
+export const QDRANT_CONFIG = {
   collectionName: "pdf-embeddings",
   url: "http://localhost:6333",
 };
 
-const embeddingModel = new GoogleGenerativeAIEmbeddings({
+export const embeddingModel = new GoogleGenerativeAIEmbeddings({
   apiKey: process.env.GOOGLE_API_KEY,
 });
 
