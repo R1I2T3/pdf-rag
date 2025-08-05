@@ -6,7 +6,10 @@ import { toNodeHandler } from "better-auth/node";
 import { Queue } from "bullmq";
 import { upload } from "./lib/multer";
 import { chain } from "./lib/model-config";
-
+import { toUIMessageStream } from "@ai-sdk/langchain";
+import { AIMessage, HumanMessage } from "@langchain/core/messages";
+import { createUIMessageStreamResponse } from "ai";
+import type { UIMessage } from "ai";
 export const queue = new Queue("file-upload-queue", {
   connection: {
     host: "localhost",
@@ -56,24 +59,32 @@ app.post("/api/upload/pdf", upload.single("pdf"), async (req, res) => {
 
 app.post("/api/chat", async (req, res) => {
   try {
-    const userQuery = req.body.message as string;
-    if (!userQuery) {
-      return res.status(400).json({ error: "Message query is required." });
-    }
-    res.setHeader("Content-Type", "text/event-stream");
-    res.setHeader("Cache-Control", "no-cache");
-    res.setHeader("Connection", "keep-alive");
-    res.flushHeaders();
-    const stream = await chain.stream(userQuery);
-    for await (const chunk of stream) {
-      if (chunk) {
-        res.write(`data: ${JSON.stringify({ message: chunk })}\n\n`);
-      }
-    }
-
-    res.end();
+    const {
+      messages,
+    }: {
+      messages: UIMessage[];
+    } = req.body;
+    console.log(messages);
+    const stream = await chain.stream(
+      messages.map((message) =>
+        message.role == "user"
+          ? new HumanMessage(
+              message.parts
+                .map((part) => (part.type === "text" ? part.text : ""))
+                .join("")
+            )
+          : new AIMessage(
+              message.parts
+                .map((part) => (part.type === "text" ? part.text : ""))
+                .join("")
+            )
+      )
+    );
+    return createUIMessageStreamResponse({
+      stream: toUIMessageStream(stream),
+    });
   } catch (error) {
-    console.error("Error in chat API:", error);
+    console.log("Error in /api/chat:", error);
     res.end(`data: ${JSON.stringify({ error: "An error occurred." })}\n\n`);
   }
 });
