@@ -1,44 +1,36 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
-import { Link } from "@tanstack/react-router";
-import { toast } from "sonner";
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Label } from "./ui/label";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+import { Lock } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
-import { useNavigate } from "@tanstack/react-router";
-const SignupForm = () => {
-  const router = useNavigate();
+import { toast } from "sonner";
+import { EyeOff, Eye } from "lucide-react";
+import { useNavigate, useSearch } from "@tanstack/react-router";
+const ResetPasswordForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const navigate = useNavigate();
+  const search = useSearch({
+    from: "/reset-password",
+  });
+  const token = search.token;
   const [formData, setFormData] = useState({
-    firstName: "",
-    email: "",
     password: "",
     confirmPassword: "",
   });
-  const [isExecuting, setIsExecuting] = useState(false);
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
+  const handleChange = (field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+  const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsExecuting(true);
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match");
-      setIsExecuting(false);
       return;
     }
-    await authClient.signUp.email(
-      {
-        name: formData.firstName,
-        email: formData.email,
-        password: formData.password,
-      },
+    authClient.resetPassword(
+      { newPassword: formData.password, token },
       {
         onError: (ctx) => {
           if (ctx.error.status === 403) {
@@ -47,67 +39,22 @@ const SignupForm = () => {
           toast.error(ctx.error.message);
         },
         onSuccess: () => {
-          toast.success("Login success");
-          router({ to: "/" });
+          toast.success("Password reset successfully");
+          navigate({ to: "/login" });
         },
       }
     );
-    setIsExecuting(false);
   };
-
-  const handleChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
-
   return (
     <div className="w-full max-w-md">
       <Card className="backdrop-blur-sm bg-card/80 shadow-[var(--elegant-shadow)] border-border/50">
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
-            Create Account
+            Reset Password
           </CardTitle>
-          <CardDescription className="text-muted-foreground">
-            Get started with your free account
-          </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="firstName" className="text-sm font-medium">
-                Name
-              </Label>
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  id="firstName"
-                  type="text"
-                  placeholder="John"
-                  value={formData.firstName}
-                  onChange={(e) => handleChange("firstName", e.target.value)}
-                  className="pl-10 h-11 bg-background/50 border-border/60 focus:border-primary focus:ring-primary/20"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium">
-                Email Address
-              </Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="john@example.com"
-                  value={formData.email}
-                  onChange={(e) => handleChange("email", e.target.value)}
-                  className="pl-10 h-11 bg-background/50 border-border/60 focus:border-primary focus:ring-primary/20"
-                  required
-                />
-              </div>
-            </div>
-
+          <form className="space-y-4" onSubmit={onSubmit}>
             <div className="space-y-2">
               <Label htmlFor="password" className="text-sm font-medium">
                 Password
@@ -167,24 +114,14 @@ const SignupForm = () => {
                 </button>
               </div>
             </div>
-
             <Button type="submit" className="w-full">
-              Create Account
+              Reset Password
             </Button>
           </form>
-          <p className="mt-6 text-center text-sm text-muted-foreground">
-            Already have an account?{" "}
-            <Link
-              to="/login"
-              className="text-primary hover:text-primary-glow transition-colors font-medium"
-            >
-              Sign in
-            </Link>
-          </p>
         </CardContent>
       </Card>
     </div>
   );
 };
 
-export default SignupForm;
+export default ResetPasswordForm;

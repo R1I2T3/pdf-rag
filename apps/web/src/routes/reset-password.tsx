@@ -1,8 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ForgotPasswordForm } from "@/components/forgot-password-form";
 import { ModeToggle } from "@/components/mode-toggle";
-export const Route = createFileRoute("/forgot-password")({
+import ResetPasswordForm from "@/components/reset-password-form";
+export const Route = createFileRoute("/reset-password")({
   component: RouteComponent,
+  validateSearch: (search: Record<string, string>) => {
+    return {
+      token: search.token || "",
+    };
+  },
 });
 
 function RouteComponent() {
@@ -11,7 +16,7 @@ function RouteComponent() {
       <div className="absolute top-4 right-4">
         <ModeToggle />
       </div>
-      <ForgotPasswordForm />
+      <ResetPasswordForm />
     </div>
   );
 }

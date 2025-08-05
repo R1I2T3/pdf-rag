@@ -11,8 +11,11 @@ export const ForgotPasswordForm = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle forgot password logic here
-    authClient.forgetPassword(
-      { email },
+    authClient.requestPasswordReset(
+      {
+        email,
+        redirectTo: `${import.meta.env.VITE_CLIENT_URL}/reset-password`,
+      },
       {
         onError: (ctx) => {
           if (ctx.error.status === 403) {
