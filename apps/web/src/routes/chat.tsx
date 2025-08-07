@@ -20,9 +20,9 @@ function RouteComponent() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
+      <header className="border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 ">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="flex h-16 items-center justify-between w-full">
             <div className="flex items-center space-x-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
                 <FileText className="h-5 w-5 text-primary-foreground" />
@@ -30,7 +30,7 @@ function RouteComponent() {
               <span className="text-xl font-bold">ChatPDF</span>
             </div>
 
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2 right-5 absolute">
               <LogoutButton />
               <ModeToggle />
             </div>
