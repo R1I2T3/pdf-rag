@@ -52,7 +52,7 @@ const FileUploadComponent: React.FC = () => {
         });
       }, 200);
 
-      const response = await fetch("http://localhost:3000/upload/pdf", {
+      const response = await fetch("/api/upload/", {
         method: "POST",
         body: formData,
       });

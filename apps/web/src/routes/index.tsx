@@ -47,33 +47,6 @@ function HomeComponent() {
               <span className="text-xl font-bold">ChatPDF</span>
             </div>
 
-            <nav className="hidden md:flex items-center space-x-8">
-              <a
-                href="#features"
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Features
-              </a>
-              <a
-                href="#how-it-works"
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-              >
-                How it Works
-              </a>
-              <a
-                href="#pricing"
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Pricing
-              </a>
-              <a
-                href="#testimonials"
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Reviews
-              </a>
-            </nav>
-
             <div className="flex items-center space-x-4">
               <ModeToggle />
               <Button variant="ghost" size="sm">

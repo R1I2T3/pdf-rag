@@ -2,7 +2,7 @@ import "dotenv/config";
 import cors from "cors";
 import express from "express";
 import { auth } from "./lib/auth";
-import { toNodeHandler } from "better-auth/node";
+import { toNodeHandler, fromNodeHeaders } from "better-auth/node";
 import { Queue } from "bullmq";
 import { upload } from "./lib/multer";
 import { chain } from "./lib/model-config";
@@ -32,16 +32,16 @@ app.get("/", (_req, res) => {
   res.status(200).send("OK");
 });
 
-app.post("/api/upload/pdf", upload.single("pdf"), async (req, res) => {
+app.post("/api/upload/", upload.single("pdf"), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: "No file uploaded." });
   }
-  // const session = await auth.api.getSession({
-  //   headers: fromNodeHeaders(req.headers),
-  // });
-  // if (!session) {
-  //   return res.status(401).json({ error: "Unauthorized" });
-  // }
+  const session = await auth.api.getSession({
+    headers: fromNodeHeaders(req.headers),
+  });
+  if (!session) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
   await queue.add(
     "file-ready",
     JSON.stringify({
@@ -55,6 +55,12 @@ app.post("/api/upload/pdf", upload.single("pdf"), async (req, res) => {
 
 app.post("/api/chat", async (req, res) => {
   try {
+    const session = await auth.api.getSession({
+      headers: fromNodeHeaders(req.headers),
+    });
+    if (!session) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
     const userQuery = req.body.message as string;
     if (!userQuery) {
       return res.status(400).json({ error: "Message query is required." });
