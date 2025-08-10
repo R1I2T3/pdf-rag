@@ -1,6 +1,9 @@
 import { Worker } from "bullmq";
 import { QdrantVectorStore } from "@langchain/qdrant";
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
+import { CSVLoader } from "@langchain/community/document_loaders/fs/csv";
+import { DocxLoader } from "@langchain/community/document_loaders/fs/docx";
+import { PPTXLoader } from "@langchain/community/document_loaders/fs/pptx";
 import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
 import path from "path";
 import "dotenv/config";
@@ -25,7 +28,6 @@ const worker = new Worker(
   "file-upload-queue",
   async (job) => {
     const { filename } = JSON.parse(job.data);
-    console.log(`Processing job ${job.id} for file: ${filename}`);
     try {
       if (
         !filename ||
@@ -40,7 +42,24 @@ const worker = new Worker(
           `Path traversal attempt detected for filename: ${filename}`
         );
       }
-      const loader = new PDFLoader(safeFilePath);
+      let loader;
+      if (safeFilePath.endsWith(".pdf")) {
+        loader = new PDFLoader(safeFilePath);
+      } else if (safeFilePath.endsWith(".csv")) {
+        loader = new CSVLoader(safeFilePath);
+      } else if (
+        safeFilePath.endsWith(".docx") ||
+        safeFilePath.endsWith(".doc")
+      ) {
+        loader = new DocxLoader(safeFilePath, {
+          type: safeFilePath.endsWith(".doc") ? "doc" : "docx",
+        });
+      } else if (safeFilePath.endsWith(".pptx")) {
+        loader = new PPTXLoader(safeFilePath);
+      } else {
+        throw new Error(`Unsupported file type: ${filename}`);
+      }
+
       const docs = await loader.load();
       if (docs.length === 0) {
         console.warn(
@@ -48,10 +67,12 @@ const worker = new Worker(
         );
         return;
       }
-      console.log(
-        `Job ${job.id}: Adding ${docs.length} document chunks to vector store.`
-      );
-      await vectorStore.addDocuments(docs);
+      const BATCH_SIZE = 500;
+      for (let i = 0; i < docs.length; i += BATCH_SIZE) {
+        const batch = docs.slice(i, i + BATCH_SIZE);
+        await vectorStore.addDocuments(batch);
+      }
+
       console.log(
         `Job ${job.id}: Successfully processed and vectorized ${filename}.`
       );

@@ -14,7 +14,7 @@ const NoMessage = ({
       <div className="space-y-2">
         <h3 className="text-lg font-semibold">No messages yet</h3>
         <p className="text-muted-foreground max-w-sm">
-          Upload a PDF document and start asking questions about its content.
+          Upload a file document and start asking questions about its content.
         </p>
       </div>
       <div className="flex flex-wrap gap-2 max-w-md">

@@ -44,7 +44,7 @@ function HomeComponent() {
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
                 <FileText className="h-5 w-5 text-primary-foreground" />
               </div>
-              <span className="text-xl font-bold">ChatPDF</span>
+              <span className="text-xl font-bold">Knowledge Base</span>
             </div>
 
             <div className="flex items-center space-x-4">
@@ -72,19 +72,19 @@ function HomeComponent() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-4xl text-center">
             <Badge variant="secondary" className="mb-4">
-              🚀 AI-Powered PDF Analysis
+              🚀 AI-Powered File Analysis
             </Badge>
             <h1 className="text-4xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
               Chat with Your{" "}
               <span className="bg-gradient-to-r from-primary to-chart-3 bg-clip-text text-transparent">
-                PDFs
+                Files
               </span>{" "}
               Instantly
             </h1>
             <p className="mt-6 text-lg leading-8 text-muted-foreground sm:text-xl">
-              Transform any PDF into an interactive conversation. Ask questions,
-              get summaries, and extract insights from your documents using
-              advanced AI technology.
+              Transform any file into an interactive conversation. Ask
+              questions, get summaries, and extract insights from your documents
+              using advanced AI technology.
             </p>
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button
@@ -100,9 +100,6 @@ function HomeComponent() {
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </div>
-            <p className="mt-4 text-sm text-muted-foreground">
-              No credit card required • Process up to 3 PDFs free
-            </p>
           </div>
         </div>
       </section>
@@ -115,8 +112,7 @@ function HomeComponent() {
               Powerful Features for Document Intelligence
             </h2>
             <p className="mt-4 text-lg text-muted-foreground">
-              Everything you need to unlock the full potential of your PDF
-              documents
+              Everything you need to unlock the full potential of your files
             </p>
           </div>
 
@@ -128,7 +124,7 @@ function HomeComponent() {
                 </div>
                 <CardTitle>AI-Powered Chat</CardTitle>
                 <CardDescription>
-                  Have natural conversations with your PDFs using advanced
+                  Have natural conversations with your files using advanced
                   language models
                 </CardDescription>
               </CardHeader>
@@ -218,9 +214,9 @@ function HomeComponent() {
                   1
                 </span>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Upload Your PDF</h3>
+              <h3 className="text-xl font-semibold mb-2">Upload Your File</h3>
               <p className="text-muted-foreground">
-                Simply drag and drop or select your PDF document to get started
+                Simply drag and drop or select your file to get started
               </p>
             </div>
 
@@ -259,11 +255,10 @@ function HomeComponent() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-primary-foreground sm:text-4xl">
-              Ready to Transform Your PDFs?
+              Ready to Transform Your Files?
             </h2>
             <p className="mt-4 text-lg text-primary-foreground/80">
-              Join thousands of users who are already chatting with their
-              documents
+              Join thousands of users who are already chatting with their files.
             </p>
             <div className="mt-8">
               <Button
@@ -288,10 +283,10 @@ function HomeComponent() {
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
                   <FileText className="h-5 w-5 text-primary-foreground" />
                 </div>
-                <span className="text-xl font-bold">ChatPDF</span>
+                <span className="text-xl font-bold">Knowledge Base</span>
               </div>
               <p className="text-sm text-muted-foreground">
-                Transform any PDF into an interactive conversation with
+                Transform any file into an interactive conversation with
                 AI-powered intelligence.
               </p>
             </div>
@@ -412,7 +407,7 @@ function HomeComponent() {
           </div>
 
           <div className="border-t border-border/40 mt-12 pt-8 text-center text-sm text-muted-foreground">
-            <p>&copy; 2024 ChatPDF. All rights reserved.</p>
+            <p>&copy; 2024 Knowledge Base. All rights reserved.</p>
           </div>
         </div>
       </footer>

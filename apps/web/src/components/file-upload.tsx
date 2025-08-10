@@ -22,13 +22,16 @@ const FileUploadComponent: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const handleFileUpload = async (file: File) => {
-    if (file.type !== "application/pdf") {
-      setError("Please upload a PDF file only");
+    if (
+      !file.name.endsWith(".pdf") ||
+      !file.name.endsWith(".docx") ||
+      !file.name.endsWith(".csv") ||
+      !file.name.endsWith(".pptx")
+    ) {
+      setError("Only PDF, DOCX, CSV, and PPTX files are allowed");
       return;
     }
-
     if (file.size > 10 * 1024 * 1024) {
-      // 10MB limit
       setError("File size must be less than 10MB");
       return;
     }
@@ -39,8 +42,6 @@ const FileUploadComponent: React.FC = () => {
 
     try {
       const formData = new FormData();
-      formData.append("pdf", file);
-
       // Simulate upload progress
       const progressInterval = setInterval(() => {
         setUploadProgress((prev) => {
@@ -85,7 +86,6 @@ const FileUploadComponent: React.FC = () => {
   const handleFileUploadButtonClick = () => {
     const el = document.createElement("input");
     el.setAttribute("type", "file");
-    el.setAttribute("accept", "application/pdf");
     el.addEventListener("change", async (ev) => {
       if (el.files && el.files.length > 0) {
         const file = el.files.item(0);
@@ -148,8 +148,8 @@ const FileUploadComponent: React.FC = () => {
         <CardContent className="flex flex-col items-center justify-center py-8 px-4 text-center">
           {isUploading ? (
             <div className="space-y-4 w-full">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 mx-auto">
-                <Upload className="h-6 w-6 text-primary animate-pulse" />
+              <div className="flex h-12 w-full items-center justify-center rounded-full bg-primary/10 mx-auto">
+                <Upload className="h-6 w-6 text-primary animate-pulse mx-auto" />
               </div>
               <div className="space-y-2">
                 <p className="text-sm font-medium">Uploading...</p>
@@ -161,13 +161,13 @@ const FileUploadComponent: React.FC = () => {
             </div>
           ) : (
             <div className="space-y-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                <Upload className="h-6 w-6 text-primary" />
+              <div className="flex h-12 w-full items-center justify-center rounded-full bg-primary/10">
+                <Upload className="h-6 w-6 text-primary mx-auto" />
               </div>
               <div className="space-y-2">
-                <h3 className="font-semibold">Upload PDF Document</h3>
+                <h3 className="font-semibold">Upload File</h3>
                 <p className="text-sm text-muted-foreground">
-                  Drag and drop your PDF here, or click to browse
+                  Drag and drop your file here, or click to browse
                 </p>
                 <p className="text-xs text-muted-foreground">
                   Maximum file size: 10MB

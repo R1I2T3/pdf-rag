@@ -16,7 +16,7 @@ export const model = new ChatGoogleGenerativeAI({
 
 export const vectorStore = new QdrantVectorStore(embeddingModel, QDRANT_CONFIG);
 const retriever = vectorStore.asRetriever({
-  k: 4,
+  k: 10,
 });
 
 const SYSTEM_PROMPT = `You are a helpful AI assistant. Your task is to answer the user's query based on the context provided.

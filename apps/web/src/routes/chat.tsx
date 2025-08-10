@@ -27,7 +27,7 @@ function RouteComponent() {
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
                 <FileText className="h-5 w-5 text-primary-foreground" />
               </div>
-              <span className="text-xl font-bold">ChatPDF</span>
+              <span className="text-xl font-bold">Knowledge Base</span>
             </div>
 
             <div className="flex items-center space-x-2 right-5 absolute">
@@ -48,7 +48,7 @@ function RouteComponent() {
               <h2 className="text-lg font-semibold">Documents</h2>
             </div>
             <p className="text-sm text-muted-foreground">
-              Upload a PDF to start chatting
+              Upload a File to start chatting
             </p>
           </div>
 
@@ -62,10 +62,10 @@ function RouteComponent() {
           <div className="p-6 border-b border-border/40 bg-background">
             <div className="flex items-center space-x-2">
               <MessageSquare className="h-5 w-5 text-primary" />
-              <h2 className="text-lg font-semibold">Chat with your PDF</h2>
+              <h2 className="text-lg font-semibold">Chat with your File</h2>
             </div>
             <p className="text-sm text-muted-foreground mt-1">
-              Ask questions about your document and get instant answers
+              Ask questions about your file and get instant answers
             </p>
           </div>
 
