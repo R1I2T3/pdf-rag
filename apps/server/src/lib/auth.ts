@@ -3,12 +3,17 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "../db";
 import { SendVerificationCode } from "./email";
 import * as schema from "../db/schema/auth";
-export const auth = betterAuth({
+export const auth: any = betterAuth({
   database: drizzleAdapter(db, {
     provider: "mysql",
     schema: schema,
   }),
-
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    },
+  },
   trustedOrigins: [process.env.CORS_ORIGIN || ""],
   secret: process.env.BETTER_AUTH_SECRET,
   baseURL: process.env.BETTER_AUTH_URL,

@@ -14,6 +14,7 @@ import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
 import { useNavigate } from "@tanstack/react-router";
+import GoogleAuth from "./google-auth";
 const SignupForm = () => {
   const router = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -181,6 +182,7 @@ const SignupForm = () => {
               Sign in
             </Link>
           </p>
+          <GoogleAuth />
         </CardContent>
       </Card>
     </div>
